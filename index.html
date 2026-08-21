@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediVault - Universal Patient Health Record</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+        background: #f4f7fb;
+        color: #172033;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        height: 100vh;
+        background: #102a43;
+        color: white;
+        padding: 25px 18px;
+    }
+
+    .logo {
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 35px;
+        text-align: center;
+    }
+
+    .logo span {
+        color: #36d1dc;
+    }
+
+    .nav-item {
+        padding: 14px 16px;
+        margin: 8px 0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+        background: #1e4e70;
+    }
+
+    /* MAIN */
+    .main {
+        margin-left: 250px;
+        padding: 30px;
+    }
+
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .topbar h1 {
+        font-size: 28px;
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #36d1dc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #102a43;
+    }
+
+    /* SEARCH */
+    .search-box {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .search-box input {
+        width: 80%;
+        padding: 12px;
+        border: 1px solid #d9e2ec;
+        border-radius: 8px;
+        outline: none;
+    }
+
+    button {
+        border: none;
+        padding: 12px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .primary {
+        background: #16a6a6;
+        color: white;
+    }
+
+    .primary:hover {
+        background: #118888;
+    }
+
+    /* CARDS */
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .card {
+        background: white;
+        padding: 22px;
+        border-radius: 15px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .card h3 {
+        font-size: 14px;
+        color: #627d98;
+        margin-bottom: 10px;
+    }
+
+    .card .number {
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .green {
+        color: #159957;
+    }
+
+    .red {
+        color: #d64545;
+    }
+
+    .blue {
+        color: #2672d9;
+    }
+
+    /* GRID */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .panel {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+    }
+
+    .panel h2 {
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    /* PATIENT */
+    .patient-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e6e9ed;
+    }
+
+    .patient-avatar {
+        width: 70px;
+        height: 70px;
+        background: #d9f4f4;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .patient-info h2 {
+        margin-bottom: 5px;
+    }
+
+    .patient-id {
+        color: #627d98;
+        font-size: 14px;
+    }
+
+    /* HISTORY */
+    .timeline {
+        margin-top: 20px;
+    }
+
+    .timeline-item {
+        border-left: 3px solid #16a6a6;
+        padding: 0 0 22px 20px;
+        margin-left: 8px;
+        position: relative;
+    }
+
+    .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -8px;
+        top: 0;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #16a6a6;
+    }
+
+    .timeline-item h4 {
+        margin-bottom: 5px;
+    }
+
+    .timeline-item p {
+        color: #627d98;
+        font-size: 14px;
+    }
+
+    /* MEDICATIONS */
+    .medicine {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+    .medicine:last-child {
+        border-bottom: none;
+    }
+
+    .medicine-name {
+        font-weight: bold;
+    }
+
+    .medicine-details {
+        font-size: 13px;
+        color: #627d98;
+        margin-top: 4px;
+    }
+
+    .badge {
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .badge.green-bg {
+        background: #d9f7e7;
+        color: #137a43;
+    }
+
+    .badge.red-bg {
+        background: #ffe0e0;
+        color: #b42323;
+    }
+
+    .badge.yellow-bg {
+        background: #fff2c2;
+        color: #856404;
+    }
+
+    /* ALERT */
+    .alert {
+        background: #fff0f0;
+        border-left: 5px solid #d64545;
+        padding: 18px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .alert strong {
+        color: #b42323;
+    }
+
+    .alert p {
+        margin-top: 7px;
+        color: #5f6c7b;
+        font-size: 14px;
+    }
+
+    /* QR */
+    .qr-box {
+        text-align: center;
+    }
+
+    .qr {
+        width: 180px;
+        height: 180px;
+        margin: 15px auto;
+        background:
+        repeating-linear-gradient(
+            45deg,
+            #000 0,
+            #000 5px,
+            #fff 5px,
+            #fff 10px
+        );
+        border: 10px solid white;
+        box-shadow: 0 0 0 2px #111;
+    }
+
+    .qr-box p {
+        color: #627d98;
+        font-size: 13px;
+    }
+
+    /* EMERGENCY */
+    .emergency {
+        background: #fff5f5;
+        border: 1px solid #ffcaca;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .emergency h3 {
+        color: #c62828;
+        margin-bottom: 15px;
+    }
+
+    .emergency-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+    }
+
+    /* ACCESS */
+    .access {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+    /* MODAL */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+    }
+
+    .modal-content {
+        background: white;
+        width: 420px;
+        max-width: 90%;
+        padding: 30px;
+        border-radius: 15px;
+    }
+
+    .modal-content h2 {
+        margin-bottom: 20px;
+    }
+
+    .modal-content input {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #d9e2ec;
+        border-radius: 8px;
+    }
+
+    .close {
+        float: right;
+        cursor: pointer;
+        font-size: 22px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width: 1000px) {
+        .cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media(max-width: 700px) {
+        .sidebar {
+            width: 70px;
+            padding: 15px 8px;
+        }
+
+        .logo {
+            font-size: 18px;
+        }
+
+        .nav-item {
+            text-align: center;
+            font-size: 0;
+        }
+
+        .nav-item:first-letter {
+            font-size: 20px;
+        }
+
+        .main {
+            margin-left: 70px;
+            padding: 15px;
+        }
+
+        .cards {
+            grid-template-columns: 1fr;
+        }
+
+        .search-box input {
+            width: 65%;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="logo">
+        Medi<span>Vault</span>
+    </div><div class="logo">
+    <div class="upm-logo">UPM</div>
+    <div class="upm-title">Universal  Patient Monitoring</div>
+</div>
+
+    <div class="nav-item active" onclick="showSection('dashboard')">
+        🏠 Dashboard
+    </div>
+
+    <div class="nav-item" onclick="showSection('patient')">
+        👤 Patient Records
+    </div>
+
+    <div class="nav-item" onclick="showSection('medications')">
+        💊 Medications
+    </div>
+
+    <div class="nav-item" onclick="showSection('reports')">
+        📄 Medical Reports
+    </div>
+
+    <div class="nav-item" onclick="showSection('emergency')">
+        🚨 Emergency
+    </div>
+
+    <div class="nav-item" onclick="showSection('access')">
+        🔐 Access Control
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+
+        <div>
+            <h1>Universal Patient Health Record</h1>
+            <p style="color:#627d98;margin-top:5px;">
+                Secure healthcare information across clinics
+            </p>
+        </div>
+
+        <div class="profile">
+            <div>
+                <strong>Dr. Arjun Kumar</strong>
+                <p style="font-size:12px;color:#627d98;">
+                    General Physician
+                </p>
+            </div>
+
+            <div class="avatar">AK</div>
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="search-box">
+
+        <input
+            id="patientSearch"
+            type="text"
+            placeholder="Search Patient ID, Name or Phone..."
+        >
+
+        <button class="primary" onclick="searchPatient()">
+            🔎 Search Patient
+        </button>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <section id="dashboard">
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Patient ID</h3>
+                <div class="number blue">MV-20481</div>
+            </div>
+
+            <div class="card">
+                <h3>Medical Records</h3>
+                <div class="number">18</div>
+            </div>
+
+            <div class="card">
+                <h3>Current Medicines</h3>
+                <div class="number green">4</div>
+            </div>
+
+            <div class="card">
+                <h3>Safety Alerts</h3>
+                <div class="number red">2</div>
+            </div>
+
+        </div>
+
+
+        <div class="content-grid">
+
+            <!-- LEFT -->
+            <div>
+
+                <!-- PATIENT -->
+                <div class="panel">
+
+                    <div class="patient-header">
+
+                        <div class="patient-avatar">
+                            👨
+                        </div>
+
+                        <div class="patient-info">
+                            <h2>Rahul Sharma</h2>
+
+                            <div class="patient-id">
+                                Universal Patient ID:
+                                <strong>MV-20481</strong>
+                            </div>
+
+                            <div style="margin-top:8px;">
+                                42 years • Male • O+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <p>
+                        <strong>Allergies:</strong>
+                        <span style="color:#c62828;">
+                            Penicillin
+                        </span>
+                    </p>
+
+                    <p style="margin-top:8px;">
+                        <strong>Chronic Conditions:</strong>
+                        Type 2 Diabetes, Hypertension
+                    </p>
+
+                </div>
+
+
+                <!-- MEDICATIONS -->
+                <div class="panel">
+
+                    <h2>💊 Current Medications</h2>
+
+                    <div class="medicine">
+
+                        <div>
+                            <div class="medicine-name">
+                                Metformin
+                            </div>
+
+                            <div class="medicine-details">
+                                500mg • Twice daily
+                            </div>
+                        </div>
+
+                        <span class="badge green-bg">
+                            Active
+                        </span>
+
+                    </div>
+
+
+                    <div class="medicine">
+
+                        <div>
+                            <div class="medicine-name">
+                                Amlodipine
+                            </div>
+
+                            <div class="medicine-details">
+                                5mg • Once daily
+                            </div>
+                        </div>
+
+                        <span class="badge green-bg">
+                            Active
+                        </span>
+
+                    </div>
+
+
+                    <div class="medicine">
+
+                        <div>
+                            <div class="medicine-name">
+                                Aspirin
+                            </div>
+
+                            <div class="medicine-details">
+                                75mg • Once daily
+                            </div>
+                        </div>
+
+                        <span class="badge green-bg">
+                            Active
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ALERT -->
+                <div class="panel">
+
+                    <h2>⚠️ Prescription Safety Alerts</h2>
+
+                    <div class="alert">
+
+                        <strong>
+                            Potential Drug Interaction
+                        </strong>
+
+                        <p>
+                            The newly selected medication may interact
+                            with the patient's existing medication.
+                        </p>
+
+                    </div>
+
+
+                    <div class="alert">
+
+                        <strong>
+                            Allergy Warning
+                        </strong>
+
+                        <p>
+                            Patient has a documented allergy to
+                            Penicillin. Verify medication ingredients
+                            before prescribing.
+                        </p>
+
+                    </div>
+
+                    <button class="primary"
+                            onclick="openPrescription()">
+                        + Create Prescription
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+            <div>
+
+                <!-- QR -->
+                <div class="panel qr-box">
+
+                    <h2>Patient Health QR</h2>
+
+                    <div class="qr"></div>
+
+                    <strong>MV-20481</strong>
+
+                    <p style="margin-top:10px;">
+                        Scan to access authorized patient information
+                    </p>
+
+                    <br>
+
+                    <button class="primary"
+                            onclick="generateQR()">
+                        Generate New QR
+                    </button>
+
+                </div>
+
+
+                <!-- EMERGENCY -->
+                <div class="panel">
+
+                    <div class="emergency">
+
+                        <h3>
+                            🚨 Emergency Information
+                        </h3>
+
+                        <div class="emergency-item">
+                            <span>Blood Group</span>
+                            <strong>O+</strong>
+                        </div>
+
+                        <div class="emergency-item">
+                            <span>Allergy</span>
+                            <strong>Penicillin</strong>
+                        </div>
+
+                        <div class="emergency-item">
+                            <span>Condition</span>
+                            <strong>Diabetes</strong>
+                        </div>
+
+                        <div class="emergency-item">
+                            <span>Emergency Contact</span>
+                            <strong>Priya Sharma</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCESS -->
+                <div class="panel">
+
+                    <h2>🔐 Recent Access</h2>
+
+                    <div class="access">
+                        <span>City Care Clinic</span>
+                        <span class="badge green-bg">
+                            Authorized
+                        </span>
+                    </div>
+
+                    <div class="access">
+                        <span>Dr. Mehta</span>
+                        <span class="badge yellow-bg">
+                            2 hrs
+                        </span>
+                    </div>
+
+                    <div class="access">
+                        <span>ABC Diagnostics</span>
+                        <span class="badge red-bg">
+                            Expired
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PATIENT SECTION -->
+    <section id="patient" style="display:none;">
+
+        <div class="panel">
+
+            <h2>👤 Patient Medical Timeline</h2>
+
+            <div class="timeline">
+
+                <div class="timeline-item">
+                    <h4>2026 — General Consultation</h4>
+                    <p>
+                        Hypertension follow-up. Medication reviewed.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>2025 — Diabetes Diagnosis</h4>
+                    <p>
+                        Type 2 Diabetes diagnosed. Metformin started.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>2024 — Blood Test</h4>
+                    <p>
+                        Routine blood investigation completed.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>2023 — Hospital Visit</h4>
+                    <p>
+                        Patient treated for hypertension.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MEDICATIONS -->
+    <section id="medications" style="display:none;">
+
+        <div class="panel">
+
+            <h2>💊 Medication History</h2>
+
+            <div class="medicine">
+                <div>
+                    <div class="medicine-name">Metformin</div>
+                    <div class="medicine-details">
+                        Started: 2025 • 500mg
+                    </div>
+                </div>
+                <span class="badge green-bg">Active</span>
+            </div>
+
+            <div class="medicine">
+                <div>
+                    <div class="medicine-name">Amlodipine</div>
+                    <div class="medicine-details">
+                        Started: 2024 • 5mg
+                    </div>
+                </div>
+                <span class="badge green-bg">Active</span>
+            </div>
+
+            <div class="medicine">
+                <div>
+                    <div class="medicine-name">Medication X</div>
+                    <div class="medicine-details">
+                        Discontinued: 2025
+                    </div>
+                </div>
+                <span class="badge red-bg">Stopped</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REPORTS -->
+    <section id="reports" style="display:none;">
+
+        <div class="panel">
+
+            <h2>📄 Medical Reports</h2>
+
+            <div class="medicine">
+                <div>
+                    <div class="medicine-name">
+                        Blood Test Report
+                    </div>
+                    <div class="medicine-details">
+                        Uploaded: 15 Aug 2026
+                    </div>
+                </div>
+
+                <button class="primary"
+                        onclick="viewReport()">
+                    View
+                </button>
+            </div>
+
+            <div class="medicine">
+                <div>
+                    <div class="medicine-name">
+                        ECG Report
+                    </div>
+                    <div class="medicine-details">
+                        Uploaded: 02 July 2026
+                    </div>
+                </div>
+
+                <button class="primary"
+                        onclick="viewReport()">
+                    View
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EMERGENCY -->
+    <section id="emergency" style="display:none;">
+
+        <div class="panel">
+
+            <h2>🚨 Emergency QR Mode</h2>
+
+            <div class="emergency">
+
+                <h3>Critical Patient Information</h3>
+
+                <p>
+                    <strong>Patient:</strong> Rahul Sharma
+                </p>
+
+                <p>
+                    <strong>Blood Group:</strong> O+
+                </p>
+
+                <p>
+                    <strong>Allergies:</strong> Penicillin
+                </p>
+
+                <p>
+                    <strong>Major Condition:</strong>
+                    Type 2 Diabetes
+                </p>
+
+                <p>
+                    <strong>Emergency Contact:</strong>
+                    Priya Sharma
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACCESS CONTROL -->
+    <section id="access" style="display:none;">
+
+        <div class="panel">
+
+            <h2>🔐 Patient Consent & Access Control</h2>
+
+            <div class="access">
+                <span>Dr. Arjun Kumar</span>
+                <span class="badge green-bg">
+                    Full Access
+                </span>
+            </div>
+
+            <div class="access">
+                <span>City Care Clinic</span>
+                <span class="badge yellow-bg">
+                    24 Hours
+                </span>
+            </div>
+
+            <div class="access">
+                <span>ABC Diagnostics</span>
+                <span class="badge red-bg">
+                    Expired
+                </span>
+            </div>
+
+            <br>
+
+            <button class="primary"
+                    onclick="grantAccess()">
+                + Grant Temporary Access
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- PRESCRIPTION MODAL -->
+<div class="modal" id="prescriptionModal">
+
+    <div class="modal-content">
+
+        <span class="close"
+              onclick="closePrescription()">
+            ×
+        </span>
+
+        <h2>💊 New Prescription</h2>
+
+        <input
+            type="text"
+            id="medicineInput"
+            placeholder="Enter medicine name"
+        >
+
+        <input
+            type="text"
+            placeholder="Dosage"
+        >
+
+        <input
+            type="text"
+            placeholder="Duration"
+        >
+
+        <br><br>
+
+        <button class="primary"
+                onclick="checkPrescription()">
+            Check Safety
+        </button>
+
+        <p id="prescriptionResult"
+           style="margin-top:20px;font-weight:bold;">
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* NAVIGATION */
+
+    function showSection(section) {
+
+        const sections = [
+            "dashboard",
+            "patient",
+            "medications",
+            "reports",
+            "emergency",
+            "access"
+        ];
+
+        sections.forEach(function(id) {
+            document.getElementById(id).style.display = "none";
+        });
+
+        document.getElementById(section).style.display = "block";
+
+        document.querySelectorAll(".nav-item")
+            .forEach(function(item) {
+                item.classList.remove("active");
+            });
+
+        event.currentTarget.classList.add("active");
+    }
+
+
+    /* PATIENT SEARCH */
+
+    function searchPatient() {
+
+        const input =
+            document.getElementById("patientSearch").value;
+
+        if(input.trim() === "") {
+            alert("Please enter Patient ID or Name.");
+            return;
+        }
+
+        if(
+            input.toLowerCase().includes("rahul") ||
+            input.toLowerCase().includes("mv-20481")
+        ) {
+
+            alert(
+                "Patient Found!\n\n" +
+                "Name: Rahul Sharma\n" +
+                "Patient ID: MV-20481\n" +
+                "Allergy: Penicillin"
+            );
+
+        } else {
+
+            alert(
+                "No patient found.\n\n" +
+                "In the real system this search would connect to the secure database."
+            );
+        }
+    }
+
+
+    /* PRESCRIPTION */
+
+    function openPrescription() {
+
+        document.getElementById(
+            "prescriptionModal"
+        ).style.display = "flex";
+
+    }
+
+    function closePrescription() {
+
+        document.getElementById(
+            "prescriptionModal"
+        ).style.display = "none";
+
+    }
+
+
+    function checkPrescription() {
+
+        const medicine =
+            document.getElementById("medicineInput")
+            .value
+            .toLowerCase();
+
+        const result =
+            document.getElementById("prescriptionResult");
+
+        if(medicine.includes("penicillin")) {
+
+            result.innerHTML =
+                "⚠️ HIGH RISK: Patient has a documented Penicillin allergy.";
+
+            result.style.color = "#c62828";
+
+        } else if(
+            medicine.includes("ibuprofen")
+        ) {
+
+            result.innerHTML =
+                "⚠️ WARNING: Review patient's existing medications before prescribing.";
+
+            result.style.color = "#d68910";
+
+        } else {
+
+            result.innerHTML =
+                "✅ No prototype-level conflict detected. Clinical review still required.";
+
+            result.style.color = "#159957";
+
+        }
+
+    }
+
+
+    /* QR */
+
+    function generateQR() {
+
+        alert(
+            "QR generated for Patient ID: MV-20481\n\n" +
+            "In the production version this would generate a secure dynamic QR code."
+        );
+
+    }
+
+
+    /* REPORT */
+
+    function viewReport() {
+
+        alert(
+            "Medical Report Viewer\n\n" +
+            "In the production version, the patient's encrypted report would open here."
+        );
+
+    }
+
+
+    /* ACCESS */
+
+    function grantAccess() {
+
+        alert(
+            "Temporary access request created.\n\n" +
+            "Patient approval would be required in the production system."
+        );
+
+    }
+
+</script>
+
+</body>
+</html>
