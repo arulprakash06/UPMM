@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: upm-universal-patient-monitoring
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    autoDeploy: true
