@@ -1,7 +1,14 @@
 services:
   - type: web
     name: upm-universal-patient-monitoring
-    runtime: static
-    buildCommand: ""
-    staticPublishPath: .
+    runtime: node
+    plan: free
+
+    buildCommand: npm install
+    startCommand: npm start
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
     autoDeploy: true
